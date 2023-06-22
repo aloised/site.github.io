@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Filtrage de données</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h2>Expériences</h2>
+
+  <label for="date-filter">Filtrer par statut:</label>
+  <select id="date-filter">
+    <option value="all">Toutes</option>
+    <option value="future">Futur projet</option>
+    <option value="completed">Terminée</option>
+    <option value="ongoing">En cours</option>
+  </select>
+
+  <div id="future-filter" style="display: none;">
+    <label for="future-date">Date prévue:</label>
+    <input type="text" id="future-date">
+  </div>
+
+  <div id="completed-filter" style="display: none;">
+    <label for="start-date">Date de début:</label>
+    <input type="text" id="start-date">
+    <label for="end-date">Date de fin:</label>
+    <input type="text" id="end-date">
+  </div>
+
+  <div id="ongoing-filter" style="display: none;">
+    <label for="start-date-ongoing">Date de début:</label>
+    <input type="text" id="start-date-ongoing">
+  </div>
+
+  <label for="location-filter">Filtrer par localisation:</label>
+  <select id="location-filter">
+    <option value="All">Toutes</option>
+    <option value="Earth orbit">Earth orbit</option>
+    <option value="Low Earth orbit">Low Earth orbit</option>
+    <option value="Earth">Earth</option>
+  </select>
+
+  <table id="experiences gamma">
+    <tr>
+      <th>Gamma ray experiment</th>
+      <th>Location</th>
+      <th>Start year</th>
+      <th>End year</th>
+      <th>Low energy limit (GeV)</th>
+      <th>High energy limit (GeV)</th>
+      <th>Homepage</th>
+      <th>TDR</th>
+    </tr>
+<tr>
+    <td>Egret - Energetic Gamma Ray Experiment Telescope</td>
+    <td>Low Earth orbit</td>
+    <td>1991</td>
+    <td>2000</td>
+    <td>0.02</td>
+    <td>30</td>
+    <td><a href="https://heasarc.gsfc.nasa.gov/docs/cgro/egret/">Website</a></td>
+    <td><a href="https://ui.adsabs.harvard.edu/abs/1993ApJS...86..629T/abstract">TDR</a></td>
+  </tr>
+  <tr>
+    <td>Cangaroo - Collaboration of Australia and Nippon for a Gamma Ray Observatory in the Outback</td>
+    <td>Earth</td>
+    <td>1999</td>
+    <td>2009</td>
+    <td>100</td>
+    <td>100,000</td>
+    <td><a href="http://icrhp9.icrr.u-tokyo.ac.jp/index.html">Website</a></td>
+    <td><a href="https://arxiv.org/abs/astro-ph/0210254">TDR</a></td>
+  </tr>
+  <tr>
+    <td>Milagro - Multiple Institution Los Alamos Gamma Ray Observatory</td>
+    <td>Earth</td>
+    <td>1999</td>
+    <td>2008</td>
+    <td>100</td>
+    <td>100,000</td>
+    <td><a href="http://www.lanl.gov/milagro/index.shtml">Website</a></td>
+    <td><a href="https://arxiv.org/pdf/astro-ph/0110513">TDR</a></td>
+  </tr>
+  <tr>
+    <td>Grams - Gamma-Ray and AntiMatter Survey</td>
+    <td>Earth orbit</td>
+    <td class="future-date">-</td>
+    <td class="future-date">-</td>
+    <td>1.00E-04</td>
+    <td>0.1</td>
+    <td><a href="https://grams.sites.northeastern.edu/">Website</a></td>
+    <td><a href="https://inspirehep.net/files/09193434be2efb78f01ee06c7ad7ed06">TDR</a></td>
+  </tr>
+  
+  <tr>
+    <td>Comptel - Compton Telescope</td>
+    <td>Earth orbit</td>
+    <td>1991</td>
+    <td>2000</td>
+    <td>0.00075</td>
+    <td>0.03</td>
+    <td><a href="https://heasarc.gsfc.nasa.gov/docs/cgro/comptel/">Website</a></td>
+    <td><a href="https://scholars.unh.edu/cgi/viewcontent.cgi?article=1220&context=ssc">TDR</a></td>
+  </tr>
+  </table>
+
+  <script>
+    const dateFilter = document.getElementById('date-filter');
+    const futureFilter = document.getElementById('future-filter');
+    const futureDate = document.getElementById('future-date');
+    const completedFilter = document.getElementById('completed-filter');
+    const startDate = document.getElementById('start-date');
+    const endDate = document.getElementById('end-date');
+    const ongoingFilter = document.getElementById('ongoing-filter');
+    const startDateOngoing = document.getElementById('start-date-ongoing');
+    const locationFilter = document.getElementById('location-filter');
+    const experiencesTable = document.getElementById('experiences gamma');
+
+    dateFilter.addEventListener('change', handleDateFilterChange);
+    locationFilter.addEventListener('change', handleLocationFilterChange);
+
+    function handleDateFilterChange() {
+      const selectedValue = dateFilter.value;
+
+      if (selectedValue === 'future') {
+  futureFilter.style.display = 'block';
+  completedFilter.style.display = 'none';
+  ongoingFilter.style.display = 'none';
+  filterTable(); 
+      } else if (selectedValue === 'completed') {
+        futureFilter.style.display = 'none';
+        completedFilter.style.display = 'block';
+        ongoingFilter.style.display = 'none';
+        filterTable();
+      } else if (selectedValue === 'ongoing') {
+        futureFilter.style.display = 'none';
+        completedFilter.style.display = 'none';
+        ongoingFilter.style.display = 'block';
+        filterTable();
+      } else {
+        futureFilter.style.display = 'none';
+        completedFilter.style.display = 'none';
+        ongoingFilter.style.display = 'none';
+        filterTable();
+      }
+    }
+
+    function handleLocationFilterChange() {
+      filterTable();
+    }
+
+    function filterTable() {
+  const selectedDateFilter = dateFilter.value;
+  const selectedLocationFilter = locationFilter.value;
+  const rows = experiencesTable.getElementsByTagName('tr');
+
+  for (let i = 1; i < rows.length; i++) {
+    const row = rows[i];
+    const startDateText = row.getElementsByClassName('future-date').length > 0 ? '-' : row.getElementsByTagName('td')[2].textContent.trim();
+    const endDateText = row.getElementsByClassName('future-date').length > 0 ? '-' : row.getElementsByTagName('td')[3].textContent.trim();
+    const location = row.getElementsByTagName('td')[1].textContent.trim();
+
+    const showRow =
+  (selectedDateFilter === 'all' ||
+    (selectedDateFilter === 'future' && (startDateText === '' || startDateText === '-') && (endDateText === '' || endDateText === '-')) ||
+    (selectedDateFilter === 'completed' && startDate.value !== '' && endDate.value !== '' && startDateText !== '' && endDateText !== '' && row.cells[0].textContent !== 'Grams - Gamma-Ray and AntiMatter Survey') ||
+    (selectedDateFilter === 'ongoing' && startDateOngoing.value !== '' && startDateText !== '' && endDateText === '')) &&
+  (selectedLocationFilter === 'All' ||
+    (selectedLocationFilter === 'Earth orbit' && (location === 'Earth orbit')) ||
+    (selectedLocationFilter === 'Low Earth orbit' && location === 'Low Earth orbit') ||
+    (selectedLocationFilter === 'Earth' && location === 'Earth') ||
+    (selectedLocationFilter === 'Future project' && startDateText === '-' && endDateText === '-'));
+
+
+
+
+    row.style.display = showRow ? 'table-row' : 'none';
+  }
+}
+    futureDate.addEventListener('input', filterTable);
+    startDate.addEventListener('input', filterTable);
+    endDate.addEventListener('input', filterTable);
+    startDateOngoing.addEventListener('input', filterTable);
+
+    filterTable();
+  </script>
+</body>
+</html>
